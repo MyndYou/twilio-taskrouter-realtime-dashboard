@@ -56,4 +56,10 @@ curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACdb12eb188fa1151a7795d5
 
 docker build -t twilio-dashboard .  
 
-docker run -it -p 500:500 twilio-dashboard
+docker run -it -p 5000:5000 twilio-dashboard
+
+# Authentication
+
+Set AUTHENTICATION_PASSWORD and AUTHENTICATION_USER environment variables.
+
+To authenticate go to `/login?username=<username>&password=<password>`

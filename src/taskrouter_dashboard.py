@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os
-from flask import Flask, request, Response, jsonify, send_from_directory
+from flask import Flask, request, Response, jsonify, send_from_directory, session, flash
 # from flask_cors import CORS, cross_origin
 import requests
 from requests.auth import HTTPBasicAuth
@@ -16,6 +16,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+app.secret_key = 'fdhgjkl7h^hjhkwhjer'
 
 #Task to Worker mapping
 task_worker = {}
@@ -30,6 +31,8 @@ twilio_api_secret = os.environ["TWILIO_API_SECRET"]
 twilio_sync_service_id = os.environ["TWILIO_SYNC_SERVICE_ID"]
 twilio_workspace_sid = os.environ["TWILIO_WORKSPACE_SID"]
 twilio_workflow_sid = os.environ["TWILIO_WORKFLOW_SID"]
+authentication_password = os.environ["AUTHENTICATION_PASSWORD"]
+authentication_user = os.environ["AUTHENTICATION_USER"]
 
 # Create Client to access Twilio resources
 client = Client(twilio_account_sid, twilio_auth_token)
@@ -202,6 +205,9 @@ def create_test_calls():
 
 @app.route('/')
 def index():
+    if not session.get('logged_in'):
+      return 'Login required'
+
     return app.send_static_file('taskrouter_dashboard.html')
 
 @app.route('/<path:path>')
@@ -212,6 +218,13 @@ def create_sync_map(userid):
     map_instance = client.sync.services(twilio_sync_service_id).sync_maps.create(unique_name=userid)
     return (map_instance.sid)
 
+@app.route('/login', methods=['GET'])
+def do_admin_login():
+    if request.args.get('password') == authentication_password and request.args.get('username') == authentication_user:
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return index()
 
 @app.route('/token')
 def token():
