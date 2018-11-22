@@ -26,13 +26,6 @@ Note: Please keep in mind the source code shared here (JS and Python) is pretty 
 
 # Setup
 
-## Step 1: Installing the server side app
-This will install the web application and all the dependencies on Heroku (login required) for you. As part of the installation, the Heroku app will walk you through configuration of environment variables.  Please click on the following button to deploy the application.
-
-### One Click Heroku Deploy of the server side app
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ameerbadri/twilio-taskrouter-realtime-dashboard)
-
 Make a note of the URL that Heroku created for your app as you'll need it for the next Step
 
 ## Step 2: Configuring TaskRouter Workspace
@@ -59,3 +52,8 @@ curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACdb12eb188fa1151a7795d5
 -u ACdb12eb188fa1151a7795d589b510d397:dab93183b7fc951e703facf0c5d7dabf
 
 {"date_updated": "Thu, 22 Nov 2018 10:26:40 +0000", "date_created": "Thu, 22 Nov 2018 10:26:40 +0000", "secret": "qKlM6d15LBl0xw7iTcZ1YDlfmc7gGduU", "friendly_name": null, "sid": "SK5df589b5f033994949194fc1f44a4394"}
+
+
+docker build -t twilio-dashboard .  
+
+docker run -it -p 500:500 twilio-dashboard
