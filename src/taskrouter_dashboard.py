@@ -111,8 +111,9 @@ def taskrouter_tasks():
         except:
             task_model['WorkerName'] = ""
         # Workaround to Video channel task missing team name
-        if (task_model['channel'] == 'video'):
-            task_model['team'] = 'Support'
+        # ARIK - disabled video support
+        # if (task_model['channel'] == 'video'):
+        #    task_model['team'] = 'Support'
 
         # Get previously stored recording url
         try:
@@ -237,6 +238,11 @@ def token():
     token.add_grant(sync_grant)
     # Return token info as JSON
     return jsonify(identity=identity, token=token.to_jwt().decode('utf-8'))
+
+
+@app.route('/keepalive', methods=['GET'])
+def keepalive():
+    return 'OK'
 
 
 if __name__ == '__main__':

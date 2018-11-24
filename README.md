@@ -26,9 +26,7 @@ Note: Please keep in mind the source code shared here (JS and Python) is pretty 
 
 # Setup
 
-Make a note of the URL that Heroku created for your app as you'll need it for the next Step
-
-## Step 2: Configuring TaskRouter Workspace
+### Configuring TaskRouter Workspace
 1) In your Twilio console (login required), go to your TaskRouter workspaces (https://www.twilio.com/console/taskrouter/workspaces/)
 2) Select the correct workspace and click on "Settings" (https://www.twilio.com/console/taskrouter/workspaces/<WORKSPACE_SID/settings)
 3) Select the "Callback Events" as selected below
@@ -37,29 +35,37 @@ Make a note of the URL that Heroku created for your app as you'll need it for th
 
 ![](taskrouter_workspace_event_url_setup.jpg)
 
-Now, Navigate to https://<YOUR_HEROKU_APP_URL>/taskrouter_dashboard.html
+---
 
-As events are generated in your TaskRouter workspace the dashboard will display key metrics.
+### Run locally
 
+1. `$ pip install -r requirements.txt --ignore-installed`
+1. `cd` into `src` and run `$ gunicorn taskrouter_dashboard:app` or `$ python taskrouter_dashboard.py`
 
+### Obtaining twilio token
 
-# Notes
+`curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACdb12eb188fa1151a7795d589b510d397/Keys.json \
+-u ACdb12eb188fa1151a7795d589b510d397:dab93183b7fc951e703facf0c5d7dabf`
 
-pip install -r requirements.txt --ignore-installed
-gunicorn taskrouter_dashboard:app
+A result might look like this:
 
-curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACdb12eb188fa1151a7795d589b510d397/Keys.json \
--u ACdb12eb188fa1151a7795d589b510d397:dab93183b7fc951e703facf0c5d7dabf
+`{"date_updated": "Thu, 22 Nov 2018 10:26:40 +0000", "date_created": "Thu, 22 Nov 2018 10:26:40 +0000", "secret": "qKlM6d15LBl0xw7iTcZ1YDlfmc7gGduU", "friendly_name": null, "sid": "SK5df589b5f033994949194fc1f44a4394"}`
 
-{"date_updated": "Thu, 22 Nov 2018 10:26:40 +0000", "date_created": "Thu, 22 Nov 2018 10:26:40 +0000", "secret": "qKlM6d15LBl0xw7iTcZ1YDlfmc7gGduU", "friendly_name": null, "sid": "SK5df589b5f033994949194fc1f44a4394"}
+### Running locally
 
+1. `$ docker build -t callcentre-dashboard .`
+1. `$ docker run -it -p 5000:5000 callcentre-dashboard`
 
-docker build -t twilio-dashboard .  
+### Deploying to production
 
-docker run -it -p 5000:5000 twilio-dashboard
+1. `$ ./scripts/build.sh`
+1. Go to https://callcentre.myndyou.care/login?username=admin&password=hyhe746hdfr
 
-# Authentication
+### Authentication
 
 Set AUTHENTICATION_PASSWORD and AUTHENTICATION_USER environment variables.
 
 To authenticate go to `/login?username=<username>&password=<password>`
+
+If the authentcation was correct - you will be redirected to the home page
+
